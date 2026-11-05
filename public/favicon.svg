@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PropNest">
+    <rect width="64" height="64" rx="15" fill="#123a31"/>
+    <path d="M13 31 32 14l19 17" fill="none" stroke="#e9b66a" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M18 29.5V51h28V29.5" fill="none" stroke="#f7f2e6" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M26 51V40.5a6 6 0 0 1 12 0V51" fill="none" stroke="#e9b66a" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

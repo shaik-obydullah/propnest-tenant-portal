@@ -1,0 +1,93 @@
+name: propnest
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: propnest-app
+    restart: unless-stopped
+    ports:
+      - "8473:80"
+    environment:
+      APP_NAME: PropNest
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_KEY: "base64:9C5u1wL5yT6cV1xmK1Kx19GtifLOTIbdD2Bjt3E+O3Q="
+      APP_URL: "http://localhost:8473"
+      APP_TIMEZONE: "Europe/London"
+      APP_LOCALE: en
+      APP_FALLBACK_LOCALE: en
+      APP_FAKER_LOCALE: en_GB
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: propnest
+      DB_USERNAME: propnest
+      DB_PASSWORD: propnest_secret
+      SESSION_DRIVER: database
+      SESSION_LIFETIME: 120
+      CACHE_STORE: database
+      QUEUE_CONNECTION: database
+      MAIL_MAILER: log
+      MAIL_FROM_ADDRESS: "hello@propnest.test"
+      MAIL_FROM_NAME: "PropNest"
+      LOG_CHANNEL: stderr
+      SEED_DATABASE: "true"
+    volumes:
+      - propnest_storage:/var/www/html/storage
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - propnest
+
+  mysql:
+    image: mysql:8.4
+    container_name: propnest-mysql
+    restart: unless-stopped
+    ports:
+      - "33068:3306"
+    environment:
+      MYSQL_DATABASE: propnest
+      MYSQL_USER: propnest
+      MYSQL_PASSWORD: propnest_secret
+      MYSQL_ROOT_PASSWORD: propnest_root_secret
+    volumes:
+      - propnest_mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+    networks:
+      - propnest
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: propnest-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8474:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: propnest
+      PMA_PASSWORD: propnest_secret
+      UPLOAD_LIMIT: 64M
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - propnest
+
+volumes:
+  propnest_mysql_data:
+    name: propnest_mysql_data
+  propnest_storage:
+    name: propnest_storage
+
+networks:
+  propnest:
+    name: propnest
