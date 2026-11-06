@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: propnest-app
-    restart: unless-stopped
+    restart: "no"
     ports:
       - "8473:80"
     environment:
@@ -45,7 +45,7 @@ services:
   mysql:
     image: mysql:8.4
     container_name: propnest-mysql
-    restart: unless-stopped
+    restart: "no"
     ports:
       - "33068:3306"
     environment:
@@ -67,7 +67,7 @@ services:
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
     container_name: propnest-phpmyadmin
-    restart: unless-stopped
+    restart: "no"
     ports:
       - "8474:80"
     environment:
